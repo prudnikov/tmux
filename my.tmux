@@ -19,32 +19,32 @@ get_tmux_option() {
 default_color="#[bg=default,fg=default,bold]"
 
 # variables
-bg=$(get_tmux_option "@minimal-tmux-bg" '#698DDA')
-fg=$(get_tmux_option "@minimal-tmux-fg" '#000000')
+bg=$(get_tmux_option "@my-tmux-bg" '#698DDA')
+fg=$(get_tmux_option "@my-tmux-fg" '#000000')
 
-use_arrow=$(get_tmux_option "@minimal-tmux-use-arrow" false)
-larrow="$("$use_arrow" && get_tmux_option "@minimal-tmux-left-arrow" "")"
-rarrow="$("$use_arrow" && get_tmux_option "@minimal-tmux-right-arrow" "")"
+use_arrow=$(get_tmux_option "@my-tmux-use-arrow" false)
+larrow="$("$use_arrow" && get_tmux_option "@my-tmux-left-arrow" "")"
+rarrow="$("$use_arrow" && get_tmux_option "@my-tmux-right-arrow" "")"
 
-status=$(get_tmux_option "@minimal-tmux-status" "bottom")
-justify=$(get_tmux_option "@minimal-tmux-justify" "centre")
+status=$(get_tmux_option "@my-tmux-status" "bottom")
+justify=$(get_tmux_option "@my-tmux-justify" "centre")
 
-indicator_state=$(get_tmux_option "@minimal-tmux-indicator" true)
-indicator_str=$(get_tmux_option "@minimal-tmux-indicator-str" " tmux ")
+indicator_state=$(get_tmux_option "@my-tmux-indicator" true)
+indicator_str=$(get_tmux_option "@my-tmux-indicator-str" " tmux ")
 indicator=$("$indicator_state" && echo " $indicator_str ")
 
-right_state=$(get_tmux_option "@minimal-tmux-right" true)
-left_state=$(get_tmux_option "@minimal-tmux-left" true)
+right_state=$(get_tmux_option "@my-tmux-right" true)
+left_state=$(get_tmux_option "@my-tmux-left" true)
 
-status_right=$("$right_state" && get_tmux_option "@minimal-tmux-status-right" "#S")
-status_left=$("$left_state" && get_tmux_option "@minimal-tmux-status-left" "${default_color}#{?client_prefix,,${indicator}}#[bg=${bg},fg=${fg},bold]#{?client_prefix,${indicator},}${default_color}")
-status_right_extra="$status_right$(get_tmux_option "@minimal-tmux-status-right-extra" "")"
-status_left_extra="$status_left$(get_tmux_option "@minimal-tmux-status-left-extra" "")"
+status_right=$("$right_state" && get_tmux_option "@my-tmux-status-right" "#S")
+status_left=$("$left_state" && get_tmux_option "@my-tmux-status-left" "${default_color}#{?client_prefix,,${indicator}}#[bg=${bg},fg=${fg},bold]#{?client_prefix,${indicator},}${default_color}")
+status_right_extra="$status_right$(get_tmux_option "@my-tmux-status-right-extra" "")"
+status_left_extra="$status_left$(get_tmux_option "@my-tmux-status-left-extra" "")"
 
-window_status_format=$(get_tmux_option "@minimal-tmux-window-status-format" ' #I:#W ')
+window_status_format=$(get_tmux_option "@my-tmux-window-status-format" ' #I:#W ')
 
-expanded_icon=$(get_tmux_option "@minimal-tmux-expanded-icon" '󰊓 ')
-show_expanded_icon_for_all_tabs=$(get_tmux_option "@minimal-tmux-show-expanded-icon-for-all-tabs" false)
+expanded_icon=$(get_tmux_option "@my-tmux-expanded-icon" '󰊓 ')
+show_expanded_icon_for_all_tabs=$(get_tmux_option "@my-tmux-show-expanded-icon-for-all-tabs" false)
 
 # Setting the options in tmux
 tmux set-option -g status-position "$status"
