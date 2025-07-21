@@ -40,7 +40,7 @@ tmux set-option -g status-position "$status"
 tmux set-option -g status-style "bg=${bg},fg=${fg}"
 tmux set-option -g status-justify "$justify"
 
-tmux set-option -g status-left "$status_left"
+tmux set-option -g status-left "$status_left ---"
 tmux set-option -g status-right "$status_right"
 
 tmux set-window-option -g window-status-separator "$window_status_separator"
