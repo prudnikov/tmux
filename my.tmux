@@ -37,7 +37,8 @@ right_state=$(get_tmux_option "@my-tmux-right" true)
 left_state=$(get_tmux_option "@my-tmux-left" true)
 
 status_right=$("$right_state" && get_tmux_option "@my-tmux-status-right" "#S")
-status_left=$("$left_state" && get_tmux_option "@my-tmux-status-left" "${default_color}#{?client_prefix,,${indicator}}#[bg=${bg},fg=${fg},bold]#{?client_prefix,${indicator},}${default_color}")
+# status_left=$("$left_state" && get_tmux_option "@my-tmux-status-left" "${default_color}#{?client_prefix,,${indicator}}#[bg=${bg},fg=${fg},bold]#{?client_prefix,${indicator},}${default_color}")
+status_left="${default_color}#{?client_prefix,,${indicator}}#[bg=${bg},fg=${fg},bold]#{?client_prefix,#S,}${default_color}"
 status_right_extra="$status_right$(get_tmux_option "@my-tmux-status-right-extra" "")"
 status_left_extra="$status_left$(get_tmux_option "@my-tmux-status-left-extra" "")"
 
