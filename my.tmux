@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
 get_tmux_option() {
-  # This helper function will get the value of the tmux variable
-  # or set it to a given value if it is not set
   local option=$1
   local default_value="$2"
 
@@ -16,46 +14,39 @@ get_tmux_option() {
   echo "$default_value"
 }
 
-default_color="#[bg=default,fg=default,bold]"
+# colors
+bg=$(get_tmux_option "@tmux-dotbar-bg" '#0B0E14')
+fg=$(get_tmux_option "@tmux-dotbar-fg" '#475266')
+fg_current=$(get_tmux_option "@tmux-dotbar-fg-current" '#BFBDB6')
+fg_session=$(get_tmux_option "@tmux-dotbar-fg-session" '#565B66')
+fg_prefix=$(get_tmux_option "@tmux-dotbar-fg-prefix" '#95E6CB')
 
-# variables
-bg=$(get_tmux_option "@my-tmux-bg" '#698DDA')
-fg=$(get_tmux_option "@my-tmux-fg" '#000000')
+status=$(get_tmux_option "@tmux-dotbar-position" "bottom")
+justify=$(get_tmux_option "@tmux-dotbar-justify" "absolute-centre")
 
-use_arrow=$(get_tmux_option "@my-tmux-use-arrow" false)
-larrow="$("$use_arrow" && get_tmux_option "@my-tmux-left-arrow" "")"
-rarrow="$("$use_arrow" && get_tmux_option "@my-tmux-right-arrow" "")"
+left_state=$(get_tmux_option "@tmux-dotbar-left" true)
+status_left=$("$left_state" && get_tmux_option "@tmux-dotbar-status-left" "#[bg=$bg,fg=$fg_session]#{?client_prefix,, #S }#[bg=$fg_prefix,fg=$bg,bold]#{?client_prefix, #S ,}#[bg=$bg,fg=${fg_session}]")
 
-status=$(get_tmux_option "@my-tmux-status" "bottom")
-justify=$(get_tmux_option "@my-tmux-justify" "centre")
+right_state=$(get_tmux_option "@tmux-dotbar-right" false)
+status_right=$("$right_state" && get_tmux_option "@tmux-dotbar-status-right" "#[bg=$bg,fg=$fg_session] %H:%M #[bg=$bg,fg=${fg_session}]")
 
-indicator_state=$(get_tmux_option "@my-tmux-indicator" true)
-indicator_str=$(get_tmux_option "@my-tmux-indicator-str" " tmux ")
-indicator=$("$indicator_state" && echo " $indicator_str ")
+window_status_format=$(get_tmux_option "@tmux-dotbar-window-status-format" ' #W ')
+window_status_separator=$(get_tmux_option "@tmux-dotbar-window-status-separator" ' • ')
 
-right_state=$(get_tmux_option "@my-tmux-right" true)
-left_state=$(get_tmux_option "@my-tmux-left" true)
+maximized_pane_icon=$(get_tmux_option "@tmux-dotbar-maximized-icon" '󰊓')
+show_maximized_icon_for_all_tabs=$(get_tmux_option "@tmux-dotbar-show-maximized-icon-for-all-tabs" false)
 
-status_right=$("$right_state" && get_tmux_option "@my-tmux-status-right" "#S")
-# status_left=$("$left_state" && get_tmux_option "@my-tmux-status-left" "${default_color}#{?client_prefix,,${indicator}}#[bg=${bg},fg=${fg},bold]#{?client_prefix,${indicator},}${default_color}")
-status_left="${default_color}#{?client_prefix,,${indicator}}#[bg=${bg},fg=${fg},bold]#{?client_prefix,#S,}${default_color}"
-status_right_extra="$status_right$(get_tmux_option "@my-tmux-status-right-extra" "")"
-status_left_extra="$status_left$(get_tmux_option "@my-tmux-status-left-extra" "")"
-
-window_status_format=$(get_tmux_option "@my-tmux-window-status-format" ' #I:#W ')
-
-expanded_icon=$(get_tmux_option "@my-tmux-expanded-icon" '󰊓 ')
-show_expanded_icon_for_all_tabs=$(get_tmux_option "@my-tmux-show-expanded-icon-for-all-tabs" false)
-
-# Setting the options in tmux
 tmux set-option -g status-position "$status"
-tmux set-option -g status-style bg=default,fg=default
+tmux set-option -g status-style "bg=${bg},fg=${fg}"
 tmux set-option -g status-justify "$justify"
 
-tmux set-option -g status-left "$status_left_extra"
-tmux set-option -g status-right "$status_right_extra"
+tmux set-option -g status-left "$status_left"
+tmux set-option -g status-right "$status_right"
 
+tmux set-window-option -g window-status-separator "$window_status_separator"
+
+tmux set-option -g window-status-style "bg=${bg},fg=${fg}"
 tmux set-option -g window-status-format "$window_status_format"
-"$show_expanded_icon_for_all_tabs" && tmux set-option -g window-status-format " ${window_status_format}#{?window_zoomed_flag,${expanded_icon},}"
+"$show_maximized_icon_for_all_tabs" && tmux set-option -g window-status-format "${window_status_format}#{?window_zoomed_flag,${maximized_pane_icon},}"
 
-tmux set-option -g window-status-current-format "#[fg=${bg}]$larrow#[bg=${bg},fg=${fg}]${window_status_format}#{?window_zoomed_flag,${expanded_icon},}#[fg=${bg},bg=default]$rarrow"
+tmux set-option -g window-status-current-format "#[bg=${bg},fg=${fg_current}]${window_status_format}#[fg=#39BAE6,bg=${bg}]#{?window_zoomed_flag,${maximized_pane_icon},}#[fg=${bg},bg=default]"
